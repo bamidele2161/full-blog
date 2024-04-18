@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/64d58efce2.js"
+      crossorigin="anonymous"
+      anonymous
+    ></script>
+    <style>
+      /* Styles for the success notification */
+      .success-notification {
+        display: none;
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #4caf50;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 9999;
+      }
+      .error-notification {
+        display: none;
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: red;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 9999;
+      }
+    </style>
+
+    <title>Sign In & Sign Up Form</title>
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body>
+    <div id="success-notification" class="success-notification"></div>
+    <div id="error-notification" class="error-notification"></div>
+
+    <div class="container">
+      <div class="nav-bar">
+        <button class="btn-nav get-access">
+          <a href="./home.html" class="link-nav"> Home</a>
+        </button>
+      </div>
+      <div class="forms-container">
+        <div class="signin-signup">
+          <!--sign up-->
+          <form action="#" class="sign-up-form" id="sign-up-form">
+            <h2 class="title">Sign up</h2>
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              <input type="text" placeholder="Firstname" id="firstname" />
+            </div>
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              <input type="text" placeholder="Lastname" id="lastname" />
+            </div>
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              <input type="text" placeholder="Username" id="username" />
+            </div>
+            <div class="input-field">
+              <i class="fas fa-envelope"></i>
+              <input type="text" placeholder="Email" id="email" />
+            </div>
+
+            <div class="input-field">
+              <i class="fas fa-lock"></i>
+              <input type="password" placeholder="Password" id="password" />
+            </div>
+
+            <div class="captcha">
+              <label for="captcha-input">Enter Captcha</label>
+              <div class="preview"></div>
+              <div class="captcha-form">
+                <input
+                  type="text"
+                  placeholder="Enter captcha text"
+                  id="captcha-input-value"
+                  class="captcha-input"
+                />
+                <button class="captcha-refresh" id="captcha-refresh">
+                  <i class="fa fa-refresh"></i>
+                </button>
+              </div>
+            </div>
+            <input
+              type="submit"
+              value="Sign up"
+              class="btn solid"
+              id="submit-btn"
+            />
+            <p class="social-text">Or Sign up with social platforms</p>
+            <div class="social-media">
+              <a href="" class="social-icon">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="" class="social-icon">
+                <i class="fab fa-facebook"></i>
+              </a>
+              <a href="" class="social-icon">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="" class="social-icon">
+                <i class="fab fa-google"></i>
+              </a>
+              <a href="" class="social-icon">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="panels-container">
+        <div class="panel right-panel">
+          <div class="content">
+            <h3>One of us?</h3>
+            <p>Access your account to create posts.</p>
+            <button class="btn transparent" id="sign-up-btn">
+              <a href="./login.html" class="link"> Sign In</a>
+            </button>
+          </div>
+          <img
+            src="../image/undraw_online_reading_np7n.svg"
+            alt="#"
+            class="image"
+          />
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="../js/register.js"></script>
+  </body>
+</html>

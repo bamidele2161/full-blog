@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/64d58efce2.js"
+      crossorigin="anonymous"
+      anonymous
+    ></script>
+    <style>
+      /* Styles for the success notification */
+      .success-notification {
+        display: none;
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #4caf50;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 9999;
+      }
+      .error-notification {
+        display: none;
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: red;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 9999;
+      }
+    </style>
+    <title>Sign In & Sign Up Form</title>
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body>
+    <div id="success-notification" class="success-notification"></div>
+    <div id="error-notification" class="error-notification"></div>
+    <div class="container">
+      <div class="nav-bar">
+        <button class="btn-nav get-access">
+          <a href="./home.html" class="link-nav"> Home</a>
+        </button>
+      </div>
+      <div class="forms-container">
+        <div class="signin-signup">
+          <form action="#" class="sign-in-form" id="sign-up-form">
+            <h2 class="title">Forgot Password</h2>
+    
+            <div class="input-field">
+              <i class="fas fa-envelope"></i>
+              <input type="text" placeholder="Email" id="email" />
+            </div>
+            <div class="forgot">
+              <a href="./login.html" class="forgot-password">Remember password?</a>
+            </div>
+
+            <input type="submit" value="Submit" class="btn solid" />
+            <p class="social-text">Or Sign in with social platforms</p>
+            <div class="social-media">
+              <a href="" class="social-icon">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="" class="social-icon">
+                <i class="fab fa-facebook"></i>
+              </a>
+              <a href="" class="social-icon">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="" class="social-icon">
+                <i class="fab fa-google"></i>
+              </a>
+              <a href="" class="social-icon">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </div>
+          </form>
+
+
+        </div>
+      </div>
+      <div class="panels-container">
+        <div class="panel left-panel">
+          <div class="content">
+            <h3>New here ?</h3>
+            <p>
+              Click on the button below to get started, we are always ready for
+              you.
+            </p>
+            <button class="btn transparent" id="sign-up-btn"> <a href="./register.html" class="link"> Sign up</a></button>
+          </div>
+          <img
+            src="../image/undraw_blog_post_re_fy5x.svg"
+            alt="#"
+            class="image"
+          />
+        </div>
+
+    </div>
+
+    <script type="module" src="../js/forgot.js"></script>
+  </body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog : Editor</title>
+    <style>
+      /* Styles for the success notification */
+      .success-notification {
+        display: none;
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #4caf50;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 9999;
+      }
+      .error-notification {
+        display: none;
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: red;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 9999;
+      }
+    </style>
+    <link rel="stylesheet" href="../css/home.css" />
+    <link rel="stylesheet" href="../css/editor.css" />
+  </head>
+  <body>
+    <div id="success-notification" class="success-notification"></div>
+    <div id="error-notification" class="error-notification"></div>
+    <nav class="navbar">
+      <img src="../image/dd.png" class="logo" alt="" />
+      <ul class="links-container">
+        <li class="link-item"><a href="./home.html" class="link">HOME</a></li>
+        <li class="link-item">
+          <a href="./editor.html" class="link">EDITOR</a>
+        </li>
+        <li class="link-item">
+          <a href="./personal.html" class="link">PERSONAL</a>
+        </li>
+        <li class="link-item"><a href="./login.html" class="link">LOGIN</a></li>
+        <li class="link-item">
+          <a href="./register.html" class="link">SIGN UP</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="banner">
+      <input type="file" accept="image/*" id="banner-upload" class="banneru" />
+      <label for="banner-upload" class="banner-upload-btn"
+        ><img src="../image/upload.png" alt="upload banner"
+      /></label>
+      <img id="banner-preview" alt="" class="uploaded" src="" />
+    </div>
+
+    <div class="blog">
+      <textarea
+        type="text"
+        class="title"
+        placeholder="Blog title..."
+        id="title"
+      ></textarea>
+      <textarea
+        type="text"
+        class="article"
+        placeholder="Start writing here..."
+        id="body"
+      ></textarea>
+    </div>
+
+    <div class="blog-options">
+      <button class="btn dark publish-btn" id="publish" type="submit">
+        publish
+      </button>
+    </div>
+
+    <script type="module" src="../js/editor.js"></script>
+  </body>
+</html>

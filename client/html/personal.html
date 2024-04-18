@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog : Personal</title>
+    <style>
+      /* Styles for the success notification */
+      .success-notification {
+        display: none;
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #4caf50;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 9999;
+      }
+      .error-notification {
+        display: none;
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: red;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 9999;
+      }
+    </style>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;1,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/home.css" />
+  </head>
+  <body>
+    <div id="success-notification" class="success-notification"></div>
+    <div id="error-notification" class="error-notification"></div>
+    <nav class="navbar">
+      <img src="../image/dd.png" class="logo" alt="" />
+      <ul class="links-container">
+        <li class="link-item"><a href="./home.html" class="link">HOME</a></li>
+        <li class="link-item">
+          <a href="./editor.html" class="link">EDITOR</a>
+        </li>
+        <li class="link-item">
+          <a href="./personal.html" class="link">PERSONAL</a>
+        </li>
+        <li class="link-item"><a href="./login.html" class="link">LOGIN</a></li>
+        <li class="link-item">
+          <a href="./register.html" class="link">SIGN UP</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="myList">
+      <h1 class="list">My Posts</h1>
+      <section class="blogs-sections"></section>
+    </div>
+    <!-- blog section -->
+
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-firestore.js"></script>
+
+    <script type="module" src="../js/personal.js"></script>
+  </body>
+</html>

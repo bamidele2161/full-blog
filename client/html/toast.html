@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Success Notification</title>
+    <style>
+      /* Styles for the success notification */
+      .success-notification {
+        display: none;
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #4caf50;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 9999;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Success Notification Element -->
+    <div id="success-notification" class="success-notification"></div>
+
+    <!-- Your HTML Content -->
+    <form action="#" class="sign-up-form" id="sign-up-form">
+      <!-- Form fields here -->
+    </form>
+    <script type="module" src="../js/toast.js"></script>
+  </body>
+</html>

@@ -1,0 +1,8 @@
+node_modules
+dist
+.env
+node_modules
+./server/.env
+./server/node_modules
+# Keep environment variables out of version control
+.env
