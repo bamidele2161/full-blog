@@ -12,7 +12,7 @@ const showSuccessMessage = (message, type) => {
     notificationElement.style.display = "none";
 
     if (type === "success") {
-      window.location.href = "../html/editor.html";
+      window.location.href = "../html/personal.html";
     }
   }, 3000); // 3000 milliseconds = 3 seconds
 };
@@ -33,6 +33,7 @@ const submitForm = (event) => {
 
     fetch("http://localhost:8000/user/login", {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -42,8 +43,6 @@ const submitForm = (event) => {
       .then((data) => {
         if (data.statusCode === 200) {
           showSuccessMessage(data?.message, "success");
-
-          document.cookie = `token=${data?.token}: path=/`;
         } else {
           showSuccessMessage(data?.error, "error");
         }
@@ -86,7 +85,7 @@ const initCaptcha = () => {
 };
 
 initCaptcha();
-
+console.log(captchaValue);
 document
   .getElementById("captcha-refresh")
   .addEventListener("click", initCaptcha);

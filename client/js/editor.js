@@ -11,9 +11,9 @@ const showSuccessMessage = (message, type) => {
   setTimeout(function () {
     notificationElement.style.display = "none";
 
-    // if (type === "success") {
-    //   window.location.href = "../html/login.html";
-    // }
+    if (type === "success") {
+      window.location.href = "../html/personal.html";
+    }
   }, 3000); // 3000 milliseconds = 3 seconds
 };
 
@@ -59,12 +59,33 @@ const handleFile = async (e) => {
   }
 };
 
+const getCsrfToken = async () => {
+  try {
+    const response = await fetch("http://localhost:3000/csrf-token", {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      fileLink;
+      showSuccessMessage("Failed to fetch CSRF token: " + response.status);
+    }
+
+    const data = await response.json();
+    return data.csrfToken;
+  } catch (error) {
+    showSuccessMessage("Error during fetching CSRF token:", error);
+    // Handle the error appropriately, e.g., show an error message to the user
+  }
+};
+
 // Retrieve input field values
 var title = document.getElementById("title");
 var body = document.getElementById("body");
 var userId = 1;
 
-const submitForm = (event) => {
+const submitForm = async (event) => {
+  const csrfToken = await getCsrfToken();
   event.preventDefault(); // Prevent the default form submission
 
   // Create data object to send to endpoint
@@ -74,10 +95,12 @@ const submitForm = (event) => {
     image: fileLink,
   };
   data;
-  fetch(`http://localhost:8000/blog/1`, {
+  fetch(`http://localhost:8000/blog`, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
+      "CSRF-Token": csrfToken,
     },
     body: JSON.stringify(data), // Convert data to JSON format
   })
@@ -105,8 +128,9 @@ if (localBlog !== null) {
   body.value = localBlog.body;
   bannerPreview.src = localBlog.image;
 
-  document.getElementById("publish").addEventListener("click", () => {
+  document.getElementById("publish").addEventListener("click", async () => {
     // Create data object to send to endpoint
+    const csrfToken = await getCsrfToken();
     var data = {
       title: title.value,
       body: body.value,
@@ -114,10 +138,12 @@ if (localBlog !== null) {
     };
 
     data;
-    fetch(`http://localhost:8000/blog/1/${localBlog.id}`, {
+    fetch(`http://localhost:8000/blog/${localBlog.id}`, {
       method: "PUT",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        "CSRF-Token": csrfToken,
       },
       body: JSON.stringify(data), // Convert data to JSON format
     })

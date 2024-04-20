@@ -7,13 +7,14 @@ const {
   DeletePost,
   GetAllPostsByUserId,
 } = require("../controller/blog");
+const authMiddleware = require("../middleware/auth");
 
 const router = express.Router();
 
-router.post("/:userId", CreatePost);
+router.post("/", authMiddleware, CreatePost);
 router.get("/", GetAllPosts);
-router.get("/user/:userId", GetAllPostsByUserId);
+router.get("/user", authMiddleware, GetAllPostsByUserId);
 router.get("/:postId", GetAPost);
-router.put("/:userId/:postId", UpdatePost);
-router.delete("/:userId/:postId", DeletePost);
+router.put("/:postId", authMiddleware, UpdatePost);
+router.delete("/:postId", authMiddleware, DeletePost);
 module.exports = router;

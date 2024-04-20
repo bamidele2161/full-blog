@@ -13,7 +13,7 @@ exports.CreatePost = async (req, res) => {
   const client = await DbConnection();
   try {
     const { title, body, image } = req.body;
-    const userId = req.params.userId;
+    const userId = req.user.id;
 
     const checkUserExistence = await client.query(checkUserExistenceQueryById, [
       userId,
@@ -41,7 +41,6 @@ exports.CreatePost = async (req, res) => {
       statusCode: 200,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       message: "Error occured!",
     });
@@ -96,11 +95,11 @@ exports.GetAPost = async (req, res) => {
 exports.GetAllPostsByUserId = async (req, res) => {
   const client = await DbConnection();
   try {
-    const userId = req.params.userId;
+    const userId = req.user.id;
     const getAllPostByUserId = await client.query(getBlogByIdByUserId, [
       userId,
     ]);
-    console.log(getAllPostByUserId?.rows[0]);
+
     if (getAllPostByUserId.rowCount < 1) {
       return res.status(400).json({
         message: "No record found",
@@ -112,7 +111,6 @@ exports.GetAllPostsByUserId = async (req, res) => {
       statusCode: 200,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       message: "Error occured!",
     });
@@ -144,7 +142,7 @@ exports.GetAllPostsById = async (req, res) => {
 exports.UpdatePost = async (req, res) => {
   const client = await DbConnection();
   try {
-    const userId = req.params.userId;
+    const userId = req.user.id;
     const postId = req.params.postId;
     const { title, body, image } = req.body;
     const checkUserExistence = await client.query(checkUserExistenceQueryById, [
@@ -176,7 +174,6 @@ exports.UpdatePost = async (req, res) => {
       statusCode: 200,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       message: "Error occured!",
     });
@@ -186,7 +183,7 @@ exports.UpdatePost = async (req, res) => {
 exports.DeletePost = async (req, res) => {
   const client = await DbConnection();
   try {
-    const userId = req.params.userId;
+    const userId = req.user.id;
     const postId = req.params.postId;
 
     const checkUserExistence = await client.query(checkUserExistenceQueryById, [

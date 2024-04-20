@@ -7,6 +7,8 @@ const dotenv = require("dotenv");
 const path = require("path");
 const cors = require("cors");
 const DbConnection = require("./config/dbConnection");
+const cookieParser = require("cookie-parser");
+// const csurf = require("csurf");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -15,19 +17,34 @@ dotenv.config();
 
 dotenv.config({ path: path.resolve(__dirname, "./.env") });
 
-app.use(
-  cors({
-    origin: "*",
-  })
-);
+// Use cookieParser middleware before session middleware
+app.use(cookieParser());
 
-//routes
+// const csrfMiddleware = csurf({ cookie: true });
+// app.use(csrfMiddleware);
+
+// Configure session middleware
+const corsOptions = {
+  origin: "http://localhost:5501",
+  credentials: true,
+  methods: "PUT,POST,DELETE",
+  allowedHeaders: "Content-Type,Authorization,CSRF-Token",
+};
+
+app.use(cors(corsOptions));
+
+// Routes
 app.use("/user", authRoutes);
 app.use("/blog", blogRoutes);
-//database
 
+// app.get("/csrf-token", (req, res) => {
+//   res.json({ csrfToken: req.csrfToken() });
+// });
+
+// Initialize database connection
 DbConnection();
-//server
+
+// Create server
 const server = http.createServer(app);
 
 const port = process.env.PORT || 4000;

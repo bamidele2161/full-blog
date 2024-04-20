@@ -11,6 +11,8 @@ const {
   encodeString,
   decodeString,
   generateRandomString,
+  hasher,
+  matchChecker,
 } = require("../utils/hashPassword");
 const { sendEmail } = require("../utils/sendEmail");
 const { generateToken } = require("../utils/token");
@@ -28,11 +30,16 @@ exports.Registration = async (req, res) => {
       });
     }
 
-    const salt = generateRandomString(32);
+    const cryptedPassword = await hasher(password, 12);
 
-    const hashedPassword = await encodeString(salt, password);
-
-    const values = [first_name, last_name, email, hashedPassword, phone, image];
+    const values = [
+      first_name,
+      last_name,
+      email,
+      cryptedPassword,
+      phone,
+      image,
+    ];
     const createUser = await client.query(createUserQuery, values);
 
     if (!createUser) {
@@ -49,7 +56,12 @@ exports.Registration = async (req, res) => {
 
     return res.status(200).json({
       message: "Account created successfully",
-      data: createUser.rows[0],
+      data: {
+        id: createUser.rows[0].id,
+        first_name: createUser.rows[0].first_name,
+        last_name: createUser.rows[0].last_name,
+        email: createUser.rows[0].email,
+      },
       token: token,
       statusCode: 200,
     });
@@ -69,30 +81,44 @@ exports.Login = async (req, res) => {
     const checkUserExistence = await client.query(checkUserExistenceQuery, [
       email,
     ]);
-    if (!checkUserExistence.rowCount === 1) {
+    if (checkUserExistence.rowCount !== 1) {
       return res.status(404).json({
         error: "User does not exist!",
       });
     }
 
-    const savedPassword = await decodeString(
+    console.log(password);
+    let checkPassword = await matchChecker(
+      password,
       checkUserExistence.rows[0].password
     );
 
-    if (savedPassword !== password) {
+    if (!checkPassword) {
       return res.status(404).json({
         error: "Invalid credentials!",
       });
     }
+
     const userSecret = process.env.TOKEN_USER_SECRET;
     const token = generateToken(
       { id: checkUserExistence.rows[0].id },
       userSecret,
       "14d"
     );
+
+    res.cookie("accessToken", token, {
+      httpOnly: true,
+      secure: false, // Set to true if served over HTTPS
+      maxAge: 3600000, // 1 hour
+    });
     return res.status(200).json({
       message: "User login successfully",
-      data: checkUserExistence.rows[0],
+      data: {
+        id: checkUserExistence.rows[0].id,
+        first_name: checkUserExistence.rows[0].first_name,
+        last_name: checkUserExistence.rows[0].last_name,
+        email: checkUserExistence.rows[0].email,
+      },
       token: token,
       statusCode: 200,
     });

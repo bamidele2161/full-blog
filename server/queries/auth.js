@@ -15,6 +15,11 @@ const updateUserQuery = `
   WHERE id = $2 
   RETURNING *
 `;
+const deleteUserQuery = `
+  DELETE FROM "users"
+  WHERE email = $1
+  RETURNING *
+`;
 module.exports = {
   checkUserExistenceQuery,
   checkUserExistenceQueryById,
@@ -22,4 +27,5 @@ module.exports = {
   updateUserCodeQuery,
   updateUserQuery,
   checkCodeExistenceQuery,
+  deleteUserQuery,
 };
