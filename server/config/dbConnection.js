@@ -23,4 +23,15 @@ const DbConnection = async () => {
   }
 };
 
-module.exports = DbConnection;
+// close db
+const closeDbConnection = async (client) => {
+  try {
+    await client.release(); // Release the connection back to the pool
+    console.log("Database connection closed");
+  } catch (error) {
+    console.error("Error closing database connection:", error);
+    throw error;
+  }
+};
+
+module.exports = { DbConnection, connectionPool, closeDbConnection };

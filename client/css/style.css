@@ -18,7 +18,13 @@ input {
   background-color: #fff;
   overflow: hidden;
 }
-
+.error {
+  color: red;
+  font-size: 10px;
+  width: 100%;
+  max-width: 350px;
+  display: flex;
+}
 .container:before {
   content: "";
   position: absolute;
@@ -163,7 +169,6 @@ form.sign-up-form {
   outline: none;
   border: none;
   line-height: 1;
-
   font-size: 1rem;
   color: #333;
 }

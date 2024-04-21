@@ -1,4 +1,4 @@
-const DbConnection = require("../config/dbConnection");
+const { connectionPool } = require("../config/dbConnection");
 const {
   checkUserExistenceQuery,
   createUserQuery,
@@ -18,12 +18,12 @@ const { sendEmail } = require("../utils/sendEmail");
 const { generateToken } = require("../utils/token");
 
 exports.Registration = async (req, res) => {
-  const client = await DbConnection();
   try {
     const { first_name, last_name, email, password, phone, image } = req.body;
-    const checkUserExistence = await client.query(checkUserExistenceQuery, [
-      email,
-    ]);
+    const checkUserExistence = await connectionPool.query(
+      checkUserExistenceQuery,
+      [email]
+    );
     if (checkUserExistence.rowCount === 1) {
       return res.status(400).json({
         message: "Email already exists",
@@ -40,7 +40,7 @@ exports.Registration = async (req, res) => {
       phone,
       image,
     ];
-    const createUser = await client.query(createUserQuery, values);
+    const createUser = await connectionPool.query(createUserQuery, values);
 
     if (!createUser) {
       return res.status(400).json({
@@ -54,6 +54,14 @@ exports.Registration = async (req, res) => {
       "14d"
     );
 
+    //send user email
+    const subject = "Account Created Successfully.";
+    const payload = {
+      name: createUser.rows[0].first_name,
+    };
+
+    sendEmail(payload, email, subject, "../view/registration.ejs");
+
     return res.status(200).json({
       message: "Account created successfully",
       data: {
@@ -66,7 +74,7 @@ exports.Registration = async (req, res) => {
       statusCode: 200,
     });
   } catch (error) {
-    console.log(error);
+    error;
     return res.status(500).json({
       message: "Error occured!",
     });
@@ -74,20 +82,19 @@ exports.Registration = async (req, res) => {
 };
 
 exports.Login = async (req, res) => {
-  const client = await DbConnection();
   try {
     const { email, password } = req.body;
 
-    const checkUserExistence = await client.query(checkUserExistenceQuery, [
-      email,
-    ]);
+    const checkUserExistence = await connectionPool.query(
+      checkUserExistenceQuery,
+      [email]
+    );
     if (checkUserExistence.rowCount !== 1) {
       return res.status(404).json({
         error: "User does not exist!",
       });
     }
 
-    console.log(password);
     let checkPassword = await matchChecker(
       password,
       checkUserExistence.rows[0].password
@@ -123,7 +130,6 @@ exports.Login = async (req, res) => {
       statusCode: 200,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       message: "Error occured!",
     });
@@ -133,21 +139,20 @@ exports.Login = async (req, res) => {
 // forgot password service
 exports.ForgotPassword = async (req, res) => {
   try {
-    const client = await DbConnection();
     const { email } = req.body;
 
-    const checkUserExistence = await client.query(checkUserExistenceQuery, [
-      email,
-    ]);
+    const checkUserExistence = await connectionPool.query(
+      checkUserExistenceQuery,
+      [email]
+    );
     if (checkUserExistence.rowCount !== 1) {
       return res.status(404).json({
         error: "User does not exist!",
       });
     }
-    console.log(checkUserExistence.rows);
     const resetCode = generateRandomString(6);
 
-    const updateUser = await client.query(updateUserQuery, [
+    const updateUser = await connectionPool.query(updateUserQuery, [
       resetCode,
       checkUserExistence.rows[0].id,
     ]);
@@ -180,26 +185,26 @@ exports.ForgotPassword = async (req, res) => {
 
 // change password service
 exports.VerifyCode = async (req, res) => {
-  const client = await DbConnection();
   try {
     const { ressetcode, email } = req.body;
 
-    const checkUserExistence = await client.query(checkUserExistenceQuery, [
-      email,
-    ]);
+    const checkUserExistence = await connectionPool.query(
+      checkUserExistenceQuery,
+      [email]
+    );
 
-    console.log(checkUserExistence.rowCount);
+    checkUserExistence.rowCount;
     if (checkUserExistence.rowCount !== 1) {
       return res.status(404).json({
         error: "User does not exist!",
       });
     }
 
-    const checkCodeExistence = await client.query(checkCodeExistenceQuery, [
-      ressetcode,
-      email,
-    ]);
-    console.log(checkCodeExistence.rowCount);
+    const checkCodeExistence = await connectionPool.query(
+      checkCodeExistenceQuery,
+      [ressetcode, email]
+    );
+    checkCodeExistence.rowCount;
     if (checkCodeExistence.rowCount !== 1) {
       return res.status(404).json({
         error: "Invalid reset code!",
@@ -218,20 +223,20 @@ exports.VerifyCode = async (req, res) => {
 
 // change password service
 exports.ChangePassword = async (req, res) => {
-  const client = await DbConnection();
   try {
     const { password, email } = req.body;
 
-    const checkUserExistence = await client.query(checkUserExistenceQuery, [
-      email,
-    ]);
+    const checkUserExistence = await connectionPool.query(
+      checkUserExistenceQuery,
+      [email]
+    );
     if (checkUserExistence.rowCount !== 1) {
       return res.status(404).json({
         error: "User does not exist!",
       });
     }
 
-    const updateUser = await client.query(updateUserCodeQuery, [
+    const updateUser = await connectionPool.query(updateUserCodeQuery, [
       password,
       checkUserExistence.rows[0].id,
     ]);
@@ -251,4 +256,12 @@ exports.ChangePassword = async (req, res) => {
   } catch (error) {
     throw error;
   }
+};
+
+exports.LogoutUser = (req, res) => {
+  //clear the cookie
+  res.clearCookie("accessToken");
+
+  // Send a response message along with the status code
+  res.status(200).json({ message: "Logout successful", statusCode: 200 });
 };

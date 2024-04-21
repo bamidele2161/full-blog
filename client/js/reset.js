@@ -17,41 +17,94 @@ const showSuccessMessage = (message, type) => {
   }, 3000); // 3000 milliseconds = 3 seconds
 };
 
-const submitForm = (event) => {
+const getCsrfToken = async () => {
+  try {
+    const response = await fetch("http://localhost:8000/csrf-token", {
+      credentials: "include",
+      method: "GET",
+    });
+    if (!response.ok) {
+      showSuccessMessage("Failed to fetch CSRF token: " + response.status);
+    }
+
+    const data = await response.json();
+    return data.csrfToken;
+  } catch (error) {
+    showSuccessMessage("Error during fetching CSRF token:", error);
+    // Handle the error appropriately, e.g., show an error message to the user
+  }
+};
+
+const displayError = (id, message) => {
+  const element = document.getElementById(id);
+  element.textContent = message;
+  element.style.display = "block";
+};
+
+const clearError = () => {
+  const error = document.querySelectorAll(".error");
+  error.forEach((element) => {
+    element.textContent = "";
+    element.style.display = "none";
+  });
+};
+
+const validateEmail = (email) => {
+  const regEx =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return regEx.test(email);
+};
+
+const submitForm = async (event) => {
+  let isValid = true;
+  clearError();
   event.preventDefault(); // Prevent the default form submission
   var password = document.getElementById("password").value;
+  var confirm = document.getElementById("confirm").value;
   // Retrieve input field value
   var email = localStorage.getItem("email");
   const parseEmail = JSON.parse(email);
-
-  // Create data object to send to endpoint
-  var data = {
-    email: parseEmail,
-    password: password,
-  };
-  data;
-  fetch("http://localhost:8000/user/reset", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data), // Convert data to JSON format
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.statusCode === 200) {
-        "Success:", data;
-        showSuccessMessage(data?.message, "success");
-        data.message;
-        document.cookie = `token=${data?.data?.token}: path=/`;
-      } else {
-        showSuccessMessage(data?.error, "error");
-      }
+  console.log(password, confirm);
+  if (password.length < 6) {
+    displayError("passwordError", "Minimum of 6 characters");
+    isValid = false;
+  } else if (confirm.length < 6) {
+    displayError("confirmError", "Minimum of 6 characters");
+    isValid = false;
+  } else if (password !== confirm) {
+    displayError("confirmError", "Password does not match");
+    isValid = false;
+  } else if (isValid) {
+    // Create data object to send to endpoint
+    var data = {
+      email: parseEmail,
+      password: password,
+    };
+    const csrfToken = await getCsrfToken();
+    fetch("http://localhost:8000/user/reset", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        "CSRF-Token": csrfToken,
+      },
+      body: JSON.stringify(data), // Convert data to JSON format
     })
-    .catch((error) => {
-      console.error("Error:", error);
-      // Handle error if required
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.statusCode === 200) {
+          "Success:", data;
+          showSuccessMessage(data?.message, "success");
+        } else {
+          showSuccessMessage(data?.error, "error");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        // Handle error if required
+      });
+  } else {
+  }
 };
 
 document.getElementById("sign-up-form").addEventListener("submit", submitForm);

@@ -8,7 +8,14 @@
   background-size: cover;
   background-position: center;
 }
-
+.logout {
+  border: none;
+  background: #dc7df4;
+  padding: 10px;
+  color: white;
+  cursor: pointer;
+  border-radius: 10px;
+}
 .banner-upload-btn {
   position: absolute;
   bottom: 20px;

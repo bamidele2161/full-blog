@@ -61,13 +61,12 @@ const handleFile = async (e) => {
 
 const getCsrfToken = async () => {
   try {
-    const response = await fetch("http://localhost:3000/csrf-token", {
+    const response = await fetch("http://localhost:8000/csrf-token", {
       method: "GET",
       credentials: "include",
     });
 
     if (!response.ok) {
-      fileLink;
       showSuccessMessage("Failed to fetch CSRF token: " + response.status);
     }
 
@@ -111,7 +110,8 @@ const submitForm = async (event) => {
         showSuccessMessage(data?.message, "success");
         data.message;
       } else {
-        showSuccessMessage(data?.error, "error");
+        showSuccessMessage(data.error + " Please Sign In", "error");
+        window.location.href = "../html/login.html";
       }
     })
     .catch((error) => {
@@ -137,7 +137,6 @@ if (localBlog !== null) {
       image: !fileLink ? localBlog.image : fileLink,
     };
 
-    data;
     fetch(`http://localhost:8000/blog/${localBlog.id}`, {
       method: "PUT",
       credentials: "include",
@@ -153,9 +152,9 @@ if (localBlog !== null) {
           "Success:", data;
           showSuccessMessage(data?.message, "success");
           localStorage.clear("blogItem");
-          data.message;
         } else {
-          showSuccessMessage(data?.error, "error");
+          showSuccessMessage(data.error + " Please Sign In", "error");
+          window.location.href = "../html/login.html";
         }
       })
       .catch((error) => {
@@ -167,4 +166,26 @@ if (localBlog !== null) {
   document.getElementById("publish").addEventListener("click", submitForm);
 }
 
+const handleLogout = () => {
+  console.log("test");
+  document.cookie = "";
+  localStorage.clear();
+
+  fetch("http://localhost:8000/user/logout", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.statusCode === 200) {
+        showSuccessMessage(data?.message, "success");
+        window.location.href = "../html/login.html";
+      } else {
+      }
+    });
+};
 document.getElementById("banner-upload").addEventListener("change", handleFile);
+
+document.getElementById("logout").addEventListener("click", handleLogout);

@@ -1,3 +1,4 @@
+const { connectionPool } = require("../config/dbConnection");
 const { checkUserExistenceQueryById } = require("../queries/auth");
 const {
   createBlogQuery,
@@ -7,17 +8,16 @@ const {
   getBlogById,
   getBlogByIdByUserId,
 } = require("../queries/blog");
-const DbConnection = require("../config/dbConnection");
 
 exports.CreatePost = async (req, res) => {
-  const client = await DbConnection();
   try {
     const { title, body, image } = req.body;
     const userId = req.user.id;
 
-    const checkUserExistence = await client.query(checkUserExistenceQueryById, [
-      userId,
-    ]);
+    const checkUserExistence = await connectionPool.query(
+      checkUserExistenceQueryById,
+      [userId]
+    );
 
     if (!checkUserExistence.rowCount === 1) {
       return res.status(400).json({
@@ -27,7 +27,7 @@ exports.CreatePost = async (req, res) => {
 
     const values = [title, body, image, userId];
 
-    const createBlog = await client.query(createBlogQuery, values);
+    const createBlog = await connectionPool.query(createBlogQuery, values);
 
     if (!createBlog) {
       return res.status(401).json({
@@ -48,9 +48,8 @@ exports.CreatePost = async (req, res) => {
 };
 
 exports.GetAllPosts = async (req, res) => {
-  const client = await DbConnection();
   try {
-    const getAllPost = await client.query(getBlogs);
+    const getAllPost = await connectionPool.query(getBlogs);
 
     if (getAllPost.rowCount < 1) {
       return res.status(400).json({
@@ -70,10 +69,9 @@ exports.GetAllPosts = async (req, res) => {
 };
 
 exports.GetAPost = async (req, res) => {
-  const client = await DbConnection();
   try {
     const postId = req.params.postId;
-    const post = await client.query(getBlogById, [postId]);
+    const post = await connectionPool.query(getBlogById, [postId]);
 
     if (post.rowCount < 1) {
       return res.status(400).json({
@@ -93,10 +91,9 @@ exports.GetAPost = async (req, res) => {
 };
 
 exports.GetAllPostsByUserId = async (req, res) => {
-  const client = await DbConnection();
   try {
     const userId = req.user.id;
-    const getAllPostByUserId = await client.query(getBlogByIdByUserId, [
+    const getAllPostByUserId = await connectionPool.query(getBlogByIdByUserId, [
       userId,
     ]);
 
@@ -118,10 +115,11 @@ exports.GetAllPostsByUserId = async (req, res) => {
 };
 
 exports.GetAllPostsById = async (req, res) => {
-  const client = await DbConnection();
   try {
     const id = req.params.id;
-    const getAllPostById = await client.query(getBlogByIdByUserId, [id]);
+    const getAllPostById = await connectionPool.query(getBlogByIdByUserId, [
+      id,
+    ]);
 
     if (!getAllPostById.rowCount < 1) {
       return res.status(400).json({
@@ -140,21 +138,21 @@ exports.GetAllPostsById = async (req, res) => {
 };
 
 exports.UpdatePost = async (req, res) => {
-  const client = await DbConnection();
   try {
     const userId = req.user.id;
     const postId = req.params.postId;
     const { title, body, image } = req.body;
-    const checkUserExistence = await client.query(checkUserExistenceQueryById, [
-      userId,
-    ]);
+    const checkUserExistence = await connectionPool.query(
+      checkUserExistenceQueryById,
+      [userId]
+    );
 
     if (!checkUserExistence.rowCount === 1) {
       return res.status(400).json({
         message: "User does not exist",
       });
     }
-    const updatePost = await client.query(updateBlogQuery, [
+    const updatePost = await connectionPool.query(updateBlogQuery, [
       title,
       body,
       image,
@@ -181,14 +179,14 @@ exports.UpdatePost = async (req, res) => {
 };
 
 exports.DeletePost = async (req, res) => {
-  const client = await DbConnection();
   try {
     const userId = req.user.id;
     const postId = req.params.postId;
 
-    const checkUserExistence = await client.query(checkUserExistenceQueryById, [
-      userId,
-    ]);
+    const checkUserExistence = await connectionPool.query(
+      checkUserExistenceQueryById,
+      [userId]
+    );
 
     if (!checkUserExistence.rowCount === 1) {
       return res.status(400).json({
@@ -196,7 +194,7 @@ exports.DeletePost = async (req, res) => {
       });
     }
 
-    const deletePost = await client.query(deleteBlogQuery, [postId]);
+    const deletePost = await connectionPool.query(deleteBlogQuery, [postId]);
 
     if (!deletePost) {
       return res.status(401).json({

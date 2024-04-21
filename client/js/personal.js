@@ -45,6 +45,7 @@ const submitForm = () => {
   })
     .then((response) => response.json())
     .then((data) => {
+      data;
       if (data.statusCode === 200) {
         data.data;
         data?.data?.map((item) => {
@@ -79,6 +80,8 @@ const submitForm = () => {
           btn.addEventListener("click", updateBlogPost);
         });
       } else {
+        showSuccessMessage(data.error + " Please Sign In", "error");
+        window.location.href = "../html/login.html";
       }
     })
     .catch((error) => {
@@ -88,7 +91,7 @@ const submitForm = () => {
 
 const deleteBlogPost = async (e) => {
   const csrfToken = await getCsrfToken();
-  console.log(csrfToken);
+  csrfToken;
   const postId = e.target.dataset.id;
   postId;
   fetch(`http://localhost:8000/blog/${postId}`, {
@@ -108,8 +111,9 @@ const deleteBlogPost = async (e) => {
         // Remove the deleted blog post card from the UI
         e.target.closest(".blog-cards").remove();
       } else {
-        console.log(data);
-        console.error("Failed to delete blog post:", data.message);
+        data;
+        showSuccessMessage(data.error + " Please Sign In", "error");
+        window.location.href = "../html/login.html";
       }
     })
     .catch((error) => {
@@ -124,4 +128,26 @@ const updateBlogPost = (e) => {
   localStorage.setItem("blogItem", blogItem);
 };
 
+const handleLogout = () => {
+  document.cookie = "";
+  localStorage.clear();
+
+  fetch("http://localhost:8000/user/logout", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.statusCode === 200) {
+        showSuccessMessage(data?.message, "success");
+        window.location.href = "../html/login.html";
+      } else {
+      }
+    });
+};
+
 window.addEventListener("load", submitForm);
+
+document.getElementById("logout").addEventListener("click", handleLogout);

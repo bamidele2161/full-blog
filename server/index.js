@@ -6,9 +6,9 @@ const authRoutes = require("./routes/auth");
 const dotenv = require("dotenv");
 const path = require("path");
 const cors = require("cors");
-const DbConnection = require("./config/dbConnection");
+const { DbConnection } = require("./config/dbConnection");
 const cookieParser = require("cookie-parser");
-// const csurf = require("csurf");
+const csurf = require("csurf");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -20,15 +20,15 @@ dotenv.config({ path: path.resolve(__dirname, "./.env") });
 // Use cookieParser middleware before session middleware
 app.use(cookieParser());
 
-// const csrfMiddleware = csurf({ cookie: true });
-// app.use(csrfMiddleware);
+const csrfMiddleware = csurf({ cookie: true });
+app.use(csrfMiddleware);
 
 // Configure session middleware
 const corsOptions = {
-  origin: "http://localhost:5501",
+  origin: "http://localhost:5500",
   credentials: true,
   methods: "PUT,POST,DELETE",
-  allowedHeaders: "Content-Type,Authorization,CSRF-Token",
+  allowedHeaders: "Content-Type,CSRF-Token",
 };
 
 app.use(cors(corsOptions));
@@ -37,9 +37,10 @@ app.use(cors(corsOptions));
 app.use("/user", authRoutes);
 app.use("/blog", blogRoutes);
 
-// app.get("/csrf-token", (req, res) => {
-//   res.json({ csrfToken: req.csrfToken() });
-// });
+app.get("/csrf-token", (req, res) => {
+  console.log({ csrfToken: req.csrfToken() });
+  res.json({ csrfToken: req.csrfToken() });
+});
 
 // Initialize database connection
 DbConnection();
@@ -53,4 +54,4 @@ server.listen(port, () => {
   console.log("listening on port " + port);
 });
 
-module.exports = app;
+module.exports = { app, server };

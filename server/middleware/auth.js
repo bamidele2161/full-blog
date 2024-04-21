@@ -11,7 +11,7 @@ const authMiddleware = (req, res, next) => {
 
   jwt.verify(token, process.env.TOKEN_USER_SECRET, (err, user) => {
     if (err) {
-      console.log(err);
+      err;
       return res.status(403).json({
         error: "Forbidden",
       }); // Forbidden if token is invalid

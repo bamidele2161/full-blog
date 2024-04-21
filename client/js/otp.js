@@ -17,8 +17,28 @@ const showSuccessMessage = (message, type) => {
   }, 3000); // 3000 milliseconds = 3 seconds
 };
 
-const submitForm = (event) => {
+const getCsrfToken = async () => {
+  try {
+    const response = await fetch("http://localhost:8000/csrf-token", {
+      credentials: "include",
+      method: "GET",
+    });
+    "wwww", response;
+    if (!response.ok) {
+      showSuccessMessage("Failed to fetch CSRF token: " + response.status);
+    }
+
+    const data = await response.json();
+    return data.csrfToken;
+  } catch (error) {
+    showSuccessMessage("Error during fetching CSRF token:", error);
+    // Handle the error appropriately, e.g., show an error message to the user
+  }
+};
+
+const submitForm = async (event) => {
   event.preventDefault(); // Prevent the default form submission
+  const csrfToken = await getCsrfToken();
   var code = document.getElementById("code").value;
   // Retrieve input field value
   var email = localStorage.getItem("email");
@@ -32,8 +52,10 @@ const submitForm = (event) => {
   data;
   fetch("http://localhost:8000/user/verify", {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
+      "CSRF-Token": csrfToken,
     },
     body: JSON.stringify(data), // Convert data to JSON format
   })
@@ -42,8 +64,6 @@ const submitForm = (event) => {
       if (data.statusCode === 200) {
         "Success:", data;
         showSuccessMessage(data?.message, "success");
-        data.message;
-        document.cookie = `token=${data?.data?.token}: path=/`;
       } else {
         showSuccessMessage(data?.error, "error");
       }
