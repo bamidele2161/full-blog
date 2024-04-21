@@ -100,6 +100,8 @@ const submitForm = async (event) => {
     .then((data) => {
       if (data.statusCode === 200) {
         showSuccessMessage(data?.message, "success");
+      } else if (data.statusCode === 400) {
+        showSuccessMessage(data?.error, "error");
       } else {
         showSuccessMessage(data.error + " Please Sign In", "error");
         window.location.href = "../html/login.html";

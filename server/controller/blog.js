@@ -8,10 +8,17 @@ const {
   getBlogById,
   getBlogByIdByUserId,
 } = require("../queries/blog");
+const { validateLength } = require("../utils/validation");
 
 exports.CreatePost = async (req, res) => {
   try {
     const { title, body, image } = req.body;
+    if (!validateLength(title, 3, 100)) {
+      return res.status(400).json({
+        error: "Your title must be between 3 and 30 characters.",
+        statusCode: 400,
+      });
+    }
     const userId = req.user.id;
 
     const checkUserExistence = await connectionPool.query(

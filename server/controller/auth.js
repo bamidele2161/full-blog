@@ -7,19 +7,54 @@ const {
   updateUserCodeQuery,
 } = require("../queries/auth");
 const {
-  hashPassword,
-  encodeString,
-  decodeString,
   generateRandomString,
   hasher,
   matchChecker,
 } = require("../utils/hashPassword");
 const { sendEmail } = require("../utils/sendEmail");
 const { generateToken } = require("../utils/token");
+const {
+  validateName,
+  validateEmail,
+  validateLength,
+} = require("../utils/validation");
 
 exports.Registration = async (req, res) => {
   try {
     const { first_name, last_name, email, password, phone, image } = req.body;
+    if (!validateName(first_name)) {
+      return res.status(400).json({
+        error: "Invalid first name provided.",
+      });
+    }
+    if (!validateName(last_name)) {
+      return res.status(400).json({
+        error: "Invalid last name provided.",
+      });
+    }
+
+    if (!validateEmail(email)) {
+      return res.status(400).json({
+        error: "Invalid email address provided.",
+      });
+    }
+    if (!validateLength(first_name, 3, 30)) {
+      return res.status(400).json({
+        error: "Your first name must be between 3 and 30 characters.",
+      });
+    }
+
+    if (!validateLength(last_name, 3, 30)) {
+      return res.status(400).json({
+        error: "Your last name must be between 3 and 30 characters.",
+      });
+    }
+
+    if (!validateLength(password, 6, 30)) {
+      return res.status(400).json({
+        error: "Your password must be at least 6 characters.",
+      });
+    }
     const checkUserExistence = await connectionPool.query(
       checkUserExistenceQuery,
       [email]
