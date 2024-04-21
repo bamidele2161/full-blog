@@ -1,47 +1,44 @@
 This project is a full-stack blog application with CRUD (Create, Read, Update, Delete) operations, user authentication, and security measures such as cookies, CSRF protection, authorization, and authentication.
 
-Getting Started
-Clone the Repository:
-git clone <repository-url>
+## Getting Started
 
-Navigate to the Server Directory:
-cd server
+Clone the Repository: <br>
+`git clone <repository-url>`
 
-Install Dependencies:
-npm install
+Navigate to the Server Directory:<br>
+`cd server`
 
-Set Up Environment Variables:
-Create a .env file in the server directory and add the following variables:
+Install Dependencies:<br>
+`npm install`
 
-PORT=3000
-DATABASE_USER=<database-user>
-DATABASE_HOST=<database-host>
-DATABASE_PASSWORD=<database-password>
-DATABASE_NAME=<database-name>
-DATABASE_PORT=<database-port>
-TOKEN_USER_SECRET=<token-user-secret>
-SECRET_COOKIE_KEY=<secret-cookie-key>
-SENDER_EMAIL=<sender-email>
-SENDER_PASSWORD=<sender-password>
-MAIL_HOST=<mail-host>
-MAIL_PORT=<mail-port>
+### Set Up Environment Variables:
 
-Run the Backend:
-nodemon index.js
+Create a .env file in the server directory using .env.example as the template:
 
-Run the Frontend:
-live-server
+### Run the Server:
 
-Features
-User authentication with secure session management and password hashing.
-CRUD operations for managing blog posts.
-CSRF protection to prevent Cross-Site Request Forgery attacks.
-Authorization checks to restrict access to certain routes or actions based on user roles.
-Secure storage of sensitive information such as passwords and tokens.
-Integration with Nodemailer for sending emails (e.g., password reset emails).
+`nodemon index.js`
 
-Contributing
+From the root directory, navigate to the Client Directory:<br>
+`cd client`
+
+### Run the Client:
+
+`live-server`
+
+## Features
+
+- User authentication with secure session management and password hashing.
+- CRUD operations for managing blog posts.
+- CSRF protection to prevent Cross-Site Request Forgery attacks.
+- Authorization checks to restrict access to certain routes or actions based on user roles.
+- Secure storage of sensitive information such as passwords and tokens.
+- Integration with Nodemailer for sending emails (e.g., password reset emails).
+
+## Contributing
+
 Contributions are welcome! Feel free to open issues or pull requests for any improvements or features you'd like to see added to the project.
 
-License
+## License
+
 This project is licensed under the MIT License.
