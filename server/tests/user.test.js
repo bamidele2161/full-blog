@@ -31,27 +31,26 @@ describe("All user endpoints test", () => {
       .post("/user")
       .send(data)
       .set("CSRF-Token", csrfToken);
-
+    console.log("check result", res);
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("Account created successfully");
     expect(res.body?.data?.email).toBe(data.email);
     id = res?.body?.data?.id;
   });
 
-  // it("should return a 200", async () => {
-  //   const data = {
-  //     email: "femade@gmail.com",
-  //     password: "111111",
-  //   };
-  //   const res = await request(app)
-  //     .post("/user/login")
-  //     .send(data)
-  //     .set("CSRF-Token", csrfToken);
-  //   console.log("login check", res);
-  //   expect(res.body.message).toBe("User login successfully");
-  //   expect(res.statusCode).toBe(200);
-  //   expect(res.body?.data?.email).toBe(data.email);
-  // });
+  it("should return a 200", async () => {
+    const data = {
+      email: "femade@gmail.com",
+      password: "111111",
+    };
+    const res = await request(app)
+      .post("/user/login")
+      .send(data)
+      .set("CSRF-Token", csrfToken);
+    expect(res.body.message).toBe("User login successfully");
+    expect(res.statusCode).toBe(200);
+    expect(res.body?.data?.email).toBe(data.email);
+  });
 
   it("should return a 404", async () => {
     const data = {
@@ -62,7 +61,6 @@ describe("All user endpoints test", () => {
       .post("/user/login")
       .send(data)
       .set("CSRF-Token", csrfToken);
-
     expect(res.statusCode).toBe(404);
   });
 

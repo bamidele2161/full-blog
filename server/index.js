@@ -25,7 +25,7 @@ app.use(csrfMiddleware);
 
 // Configure session middleware
 const corsOptions = {
-  origin: "http://localhost:5500",
+  origin: "http://localhost:5501",
   credentials: true,
   methods: "PUT,POST,DELETE",
   allowedHeaders: "Content-Type,CSRF-Token",

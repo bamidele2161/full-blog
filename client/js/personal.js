@@ -75,8 +75,7 @@ const submitForm = () => {
           btn.addEventListener("click", updateBlogPost);
         });
       } else {
-        showSuccessMessage(data.error + " Please Sign In", "error");
-        window.location.href = "../html/login.html";
+        showSuccessMessage(data.error + "No Post, Please create post", "error");
       }
     })
     .catch((error) => {

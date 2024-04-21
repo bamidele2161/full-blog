@@ -50,7 +50,7 @@ const handleFile = async (e) => {
     reader.readAsDataURL(file);
     const link = await convertToLink(file);
     fileLink = link?.url;
-    showSuccessMessage("File Uploaded successfully", "success");
+    // showSuccessMessage("File Uploaded successfully", "success");
   } catch (error) {}
 };
 

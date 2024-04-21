@@ -270,9 +270,9 @@ exports.ChangePassword = async (req, res) => {
         error: "User does not exist!",
       });
     }
-
+    const cryptedPassword = await hasher(password, 12);
     const updateUser = await connectionPool.query(updateUserCodeQuery, [
-      password,
+      cryptedPassword,
       checkUserExistence.rows[0].id,
     ]);
 

@@ -21,6 +21,11 @@ const deleteBlogQuery = `
   RETURNING *
 `;
 
+const deleteBlogByTitleQuery = `
+  DELETE FROM "posts"
+  WHERE title = $1
+  RETURNING *
+`;
 module.exports = {
   getBlogById,
   getBlogByIdByUserId,
@@ -29,4 +34,5 @@ module.exports = {
   getBlogByIdById,
   updateBlogQuery,
   deleteBlogQuery,
+  deleteBlogByTitleQuery,
 };
