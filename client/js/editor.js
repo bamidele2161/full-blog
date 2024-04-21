@@ -3,7 +3,6 @@ const showSuccessMessage = (message, type) => {
     type === "success"
       ? document.getElementById("success-notification")
       : document.getElementById("error-notification");
-  message;
   notificationElement.textContent = message;
   notificationElement.style.display = "block";
 
@@ -45,18 +44,14 @@ const handleFile = async (e) => {
   try {
     const file = e.target.files[0];
     const reader = new FileReader();
-    e.target, file, e;
     reader.onload = () => {
       bannerPreview.src = reader.result;
     };
     reader.readAsDataURL(file);
     const link = await convertToLink(file);
     fileLink = link?.url;
-    fileLink;
     showSuccessMessage("File Uploaded successfully", "success");
-  } catch (error) {
-    error;
-  }
+  } catch (error) {}
 };
 
 const getCsrfToken = async () => {
@@ -74,14 +69,12 @@ const getCsrfToken = async () => {
     return data.csrfToken;
   } catch (error) {
     showSuccessMessage("Error during fetching CSRF token:", error);
-    // Handle the error appropriately, e.g., show an error message to the user
   }
 };
 
 // Retrieve input field values
 var title = document.getElementById("title");
 var body = document.getElementById("body");
-var userId = 1;
 
 const submitForm = async (event) => {
   const csrfToken = await getCsrfToken();
@@ -93,7 +86,7 @@ const submitForm = async (event) => {
     body: body.value,
     image: fileLink,
   };
-  data;
+
   fetch(`http://localhost:8000/blog`, {
     method: "POST",
     credentials: "include",
@@ -106,9 +99,7 @@ const submitForm = async (event) => {
     .then((response) => response.json())
     .then((data) => {
       if (data.statusCode === 200) {
-        "Success:", data;
         showSuccessMessage(data?.message, "success");
-        data.message;
       } else {
         showSuccessMessage(data.error + " Please Sign In", "error");
         window.location.href = "../html/login.html";
@@ -116,13 +107,11 @@ const submitForm = async (event) => {
     })
     .catch((error) => {
       console.error("Error:", error);
-      // Handle error if required
     });
 };
 
 const localBlog = JSON.parse(localStorage.getItem("blogItem"));
 
-localBlog;
 if (localBlog !== null) {
   title.value = localBlog.title;
   body.value = localBlog.body;
@@ -149,7 +138,6 @@ if (localBlog !== null) {
       .then((response) => response.json())
       .then((data) => {
         if (data.statusCode === 200) {
-          "Success:", data;
           showSuccessMessage(data?.message, "success");
           localStorage.clear("blogItem");
         } else {
@@ -159,7 +147,6 @@ if (localBlog !== null) {
       })
       .catch((error) => {
         console.error("Error:", error);
-        // Handle error if required
       });
   });
 } else {
@@ -167,7 +154,6 @@ if (localBlog !== null) {
 }
 
 const handleLogout = () => {
-  console.log("test");
   document.cookie = "";
   localStorage.clear();
 

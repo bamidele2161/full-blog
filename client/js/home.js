@@ -31,8 +31,6 @@ const filterData = (searchQuery) => {
           item.title.toLowerCase().includes(searchQuery.toLowerCase())
         )
       : list;
-  searchQuery;
-  filteredList;
 
   renderData(filteredList);
 };

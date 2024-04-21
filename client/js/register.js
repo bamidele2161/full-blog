@@ -3,7 +3,6 @@ const showSuccessMessage = (message, type) => {
     type === "success"
       ? document.getElementById("success-notification")
       : document.getElementById("error-notification");
-
   notificationElement.textContent = message;
   notificationElement.style.display = "block";
 
@@ -23,7 +22,6 @@ const getCsrfToken = async () => {
       credentials: "include",
       method: "GET",
     });
-    "wwww", response;
     if (!response.ok) {
       showSuccessMessage("Failed to fetch CSRF token: " + response.status);
     }
@@ -119,13 +117,11 @@ const submitForm = async (event) => {
     var data = {
       first_name: firstname,
       last_name: lastname,
-      // username: username,
       email: email,
       password: password,
       phone: "4345435345",
       image: "http://34535fgddgdfggdgd",
     };
-    data;
     fetch("http://localhost:8000/user", {
       method: "POST",
       credentials: "include",
@@ -146,7 +142,6 @@ const submitForm = async (event) => {
       })
       .catch((error) => {
         console.error("Error:", error);
-        // Handle error if required
       });
   } else {
     showSuccessMessage("Invalid captcha", "error");

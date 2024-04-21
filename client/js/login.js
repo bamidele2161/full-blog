@@ -3,14 +3,12 @@ const showSuccessMessage = (message, type) => {
     type === "success"
       ? document.getElementById("success-notification")
       : document.getElementById("error-notification");
-
   notificationElement.textContent = message;
   notificationElement.style.display = "block";
 
   // Hide the notification after a certain duration (e.g., 3 seconds)
   setTimeout(function () {
     notificationElement.style.display = "none";
-
     if (type === "success") {
       window.location.href = "../html/personal.html";
     }
@@ -22,7 +20,6 @@ const getCsrfToken = async () => {
       credentials: "include",
       method: "GET",
     });
-    "wwww", response;
     if (!response.ok) {
       showSuccessMessage("Failed to fetch CSRF token: " + response.status);
     }
@@ -31,7 +28,6 @@ const getCsrfToken = async () => {
     return data.csrfToken;
   } catch (error) {
     showSuccessMessage("Error during fetching CSRF token:", error);
-    // Handle the error appropriately, e.g., show an error message to the user
   }
 };
 
@@ -63,7 +59,6 @@ const initCaptcha = () => {
 };
 
 initCaptcha();
-console.log(captchaValue);
 document
   .getElementById("captcha-refresh")
   .addEventListener("click", initCaptcha);
@@ -133,7 +128,6 @@ const submitForm = async (event) => {
       })
       .catch((error) => {
         console.error("Error:", error);
-        // Handle error if required
       });
   } else {
     showSuccessMessage("Invalid captcha", "error");

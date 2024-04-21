@@ -3,7 +3,6 @@ const showSuccessMessage = (message, type) => {
     type === "success"
       ? document.getElementById("success-notification")
       : document.getElementById("error-notification");
-  message;
   notificationElement.textContent = message;
   notificationElement.style.display = "block";
 
@@ -21,7 +20,6 @@ const getCsrfToken = async () => {
     });
 
     if (!response.ok) {
-      fileLink;
       showSuccessMessage("Failed to fetch CSRF token: " + response.status);
     }
 
@@ -35,7 +33,6 @@ const getCsrfToken = async () => {
 
 const submitForm = () => {
   // Create data object to send to endpoint
-  ("tesing");
   fetch("http://localhost:8000/blog/user", {
     method: "GET",
     credentials: "include",
@@ -45,9 +42,7 @@ const submitForm = () => {
   })
     .then((response) => response.json())
     .then((data) => {
-      data;
       if (data.statusCode === 200) {
-        data.data;
         data?.data?.map((item) => {
           const blogPost = `
               <div class="blog-cards" key=${item.id}>
@@ -91,9 +86,7 @@ const submitForm = () => {
 
 const deleteBlogPost = async (e) => {
   const csrfToken = await getCsrfToken();
-  csrfToken;
   const postId = e.target.dataset.id;
-  postId;
   fetch(`http://localhost:8000/blog/${postId}`, {
     method: "DELETE",
     credentials: "include",
@@ -111,7 +104,6 @@ const deleteBlogPost = async (e) => {
         // Remove the deleted blog post card from the UI
         e.target.closest(".blog-cards").remove();
       } else {
-        data;
         showSuccessMessage(data.error + " Please Sign In", "error");
         window.location.href = "../html/login.html";
       }
@@ -124,7 +116,6 @@ const deleteBlogPost = async (e) => {
 const updateBlogPost = (e) => {
   e.stopPropagation();
   const blogItem = e.target.getAttribute("data-item");
-  blogItem;
   localStorage.setItem("blogItem", blogItem);
 };
 

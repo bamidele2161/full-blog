@@ -1,6 +1,5 @@
 export const showSuccessMessage = (message) => {
   var notificationElement = document.getElementById("success-notification");
-  message;
   notificationElement.textContent = message;
   notificationElement.style.display = "block";
 

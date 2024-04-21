@@ -3,7 +3,6 @@ const showSuccessMessage = (message, type) => {
     type === "success"
       ? document.getElementById("success-notification")
       : document.getElementById("error-notification");
-  message;
   notificationElement.textContent = message;
   notificationElement.style.display = "block";
 
@@ -23,7 +22,7 @@ const getCsrfToken = async () => {
       credentials: "include",
       method: "GET",
     });
-    "wwww", response;
+
     if (!response.ok) {
       showSuccessMessage("Failed to fetch CSRF token: " + response.status);
     }
@@ -49,7 +48,7 @@ const submitForm = async (event) => {
     email: parseEmail,
     ressetcode: code,
   };
-  data;
+
   fetch("http://localhost:8000/user/verify", {
     method: "POST",
     credentials: "include",
@@ -62,7 +61,6 @@ const submitForm = async (event) => {
     .then((response) => response.json())
     .then((data) => {
       if (data.statusCode === 200) {
-        "Success:", data;
         showSuccessMessage(data?.message, "success");
       } else {
         showSuccessMessage(data?.error, "error");
@@ -70,7 +68,6 @@ const submitForm = async (event) => {
     })
     .catch((error) => {
       console.error("Error:", error);
-      // Handle error if required
     });
 };
 

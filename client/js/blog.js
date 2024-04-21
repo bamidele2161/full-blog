@@ -1,8 +1,6 @@
 const submitForm = () => {
   // Create data object to send to endpoint
-  ("tesing");
   const selectedId = JSON.parse(localStorage.getItem("selectedId"));
-  "selectedItem", selectedId;
   const id = parseInt(selectedId);
   fetch(`http://localhost:8000/blog/${id}`, {
     method: "GET",
@@ -27,7 +25,6 @@ const submitForm = () => {
                  ${item.body}
                 </div>
                     `;
-          blogPost;
           document.querySelector(".blog").innerHTML = blogPost;
         });
       } else {

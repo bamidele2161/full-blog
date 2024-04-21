@@ -3,7 +3,6 @@ const showSuccessMessage = (message, type) => {
     type === "success"
       ? document.getElementById("success-notification")
       : document.getElementById("error-notification");
-  message;
   notificationElement.textContent = message;
   notificationElement.style.display = "block";
 
@@ -94,7 +93,6 @@ const submitForm = async (event) => {
       })
       .catch((error) => {
         console.error("Error:", error);
-        // Handle error if required
       });
   }
 };
