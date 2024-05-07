@@ -4,16 +4,18 @@ const { deleteUserQuery } = require("../queries/auth");
 const { connectionPool, closeDbConnection } = require("../config/dbConnection");
 
 describe("All user endpoints test", () => {
+  let csrfToken;
+  let id;
+  let cookies;
+
   beforeAll(async () => {
     const email = "new4@gmail.com";
     const deletePost = await connectionPool.query(deleteUserQuery, [email]);
 
     const csrfResponse = await request(app).get("/csrf-token").expect(200);
     csrfToken = csrfResponse.body.csrfToken;
-    console.log(csrfToken);
+    cookies = csrfResponse.headers["set-cookie"];
   });
-
-  let csrfToken;
 
   const data = {
     first_name: "new",
@@ -24,14 +26,13 @@ describe("All user endpoints test", () => {
     image: "avatar.png",
   };
 
-  let id;
-
   it("should create a new user", async () => {
     const res = await request(app)
       .post("/user")
       .send(data)
+      .set("Cookie", cookies)
       .set("CSRF-Token", csrfToken);
-    console.log("check result", res);
+
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("Account created successfully");
     expect(res.body?.data?.email).toBe(data.email);
@@ -46,6 +47,7 @@ describe("All user endpoints test", () => {
     const res = await request(app)
       .post("/user/login")
       .send(data)
+      .set("Cookie", cookies)
       .set("CSRF-Token", csrfToken);
     expect(res.body.message).toBe("User login successfully");
     expect(res.statusCode).toBe(200);
@@ -54,12 +56,13 @@ describe("All user endpoints test", () => {
 
   it("should return a 404", async () => {
     const data = {
-      email: "femiade@gmail.com",
+      email: "femade@gmail.com",
       password: "11111111",
     };
     const res = await request(app)
       .post("/user/login")
       .send(data)
+      .set("Cookie", cookies)
       .set("CSRF-Token", csrfToken);
     expect(res.statusCode).toBe(404);
   });

@@ -4,6 +4,11 @@ const { connectionPool, closeDbConnection } = require("../config/dbConnection");
 const { deleteBlogByTitleQuery } = require("../queries/blog");
 
 describe("All post endpoints test", () => {
+  let csrfToken;
+  let id;
+  let cookies;
+  let accessToken;
+
   beforeAll(async () => {
     const title = "testing";
     const deletePost = await connectionPool.query(deleteBlogByTitleQuery, [
@@ -12,25 +17,42 @@ describe("All post endpoints test", () => {
 
     const csrfResponse = await request(app).get("/csrf-token").expect(200);
     csrfToken = csrfResponse.body.csrfToken;
+    csrfCookie = csrfResponse.headers["set-cookie"];
     console.log(csrfToken);
+    const loginData = {
+      email: "femade@gmail.com",
+      password: "111111",
+    };
+    const loginResponse = await request(app)
+      .post("/user/login")
+      .send(loginData)
+      .set("Cookie", cookies)
+      .set("CSRF-Token", csrfToken);
+
+    cookies = loginResponse.headers["set-cookie"];
+
+    console.log("sucvcesss", loginResponse.body);
+    const accessTokenCookie = loginResponse.headers["set-cookie"].find(
+      (cookie) => cookie.startsWith("accessToken=")
+    );
+    cookies = [...csrfCookie, ...accessTokenCookie];
+    // accessToken = accessTokenCookie.match(/accessToken=([^;]*)/)[1];
   });
 
-  let csrfToken;
-
-  const data = {
-    title: "testing",
-    body: "this it the testing body",
-    image: "avatar.png",
-  };
-
-  let id;
-
   it("should create a new post", async () => {
+    const data = {
+      title: "testing",
+      body: "this it the testing body",
+      image: "avatar.png",
+    };
+
     const res = await request(app)
       .post("/blog")
       .send(data)
-      .set("CSRF-Token", csrfToken);
-
+      .set("CSRF-Token", csrfToken)
+      .set("Cookie", cookies);
+    console.log(cookies, "dwd");
+    console.log("femi", csrfToken);
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("Post created successfully");
     expect(res.body?.data?.title).toBe(data.title);
@@ -57,7 +79,9 @@ describe("All post endpoints test", () => {
   it("should update a blog", async () => {
     const res = await request(app)
       .put(`/blog/${id}`)
+      .set("Cookie", [`accessToken=${accessToken}`])
       .set("CSRF-Token", csrfToken)
+      .set("Cookie", cookies)
       .send({
         title: "testing",
         body: "this it the testing body",
@@ -65,6 +89,10 @@ describe("All post endpoints test", () => {
       });
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("Post updated successfully");
+  });
+
+  afterEach(async () => {
+    // Consider adding logic to clean up test data here (e.g., delete test posts)
   });
 
   // afterAll(async () => {

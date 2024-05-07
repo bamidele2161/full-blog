@@ -127,6 +127,7 @@ exports.Login = async (req, res) => {
     if (checkUserExistence.rowCount !== 1) {
       return res.status(404).json({
         error: "User does not exist!",
+        statusCode: 404,
       });
     }
 
@@ -138,6 +139,7 @@ exports.Login = async (req, res) => {
     if (!checkPassword) {
       return res.status(404).json({
         error: "Invalid credentials!",
+        statusCode: 404,
       });
     }
 
